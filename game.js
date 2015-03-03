@@ -9,6 +9,7 @@
         this.size = {x:screen.canvas.width, y:screen.canvas.height};
         this.bodies = [new Player(this)]
         this.origin = new Origin(this)
+        this.fruit = []
 
         var self = this;
         var tick = function(){
@@ -25,6 +26,9 @@
             for (var i = 0; i< this.bodies.length; i++){
                 this.bodies[i].update();
             }
+            if (Math.random() > 0.995 && this.fruit.length==0){
+                this.addFruit()
+            }
         },
         draw: function(screen){
             screen.clearRect(0, 0, this.size.x, this.size.y);
@@ -35,7 +39,9 @@
         },
         addBody: function(body){
             this.bodies.push(body);
-            //console.log(this.bodies)
+        },
+        addFruit: function(){
+            console.log('fruit added')
         }
 
     };
@@ -118,7 +124,7 @@
         this.game = game;
 
         this.size = {x:10, y:10};
-        this.centre = {x:previous.tracks.x[0], y:previous.tracks.y[0]}
+        this.centre = {x:previous.tracks.x[0], y:previous.tracks.y[0]};
 
         this.prev = previous;
         this.next = null;
@@ -143,6 +149,22 @@
             storeThisPosition(this)
         }
     }
+
+    var Fruit = function (game, point_size, centre, velocity){
+        this.game = game; 
+        this.points = points;
+        
+        this.size = {x:10, y:10};
+        this.centre = centre;
+        this.velocity = velocity;
+    }
+
+    Fruit.prototype = {
+       draw: function(screen){
+            drawRect(screen, this)
+       }
+    }
+
 
 
    var Origin = function(game){ //why?? function of game?
