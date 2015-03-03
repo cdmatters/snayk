@@ -128,9 +128,13 @@
                 }
         },
         checkCollision: function(){
-            for (i=0; i<this.game.fruit.length; i++ ){
+            for (var i=0; i<this.game.fruit.length; i++ ){
                 if (isCollision(this, this.game.fruit[i])){
-                    console.log('gotcha');
+                    for (var j= 0; j< this.game.fruit[i].points; j++){
+                        this.addTail();
+                    }
+                    this.game.fruit.splice(i,1);
+
                 }
             }    
         }
