@@ -100,6 +100,8 @@
         
             this.toCartesian(this.polars.r, this.polars.theta) ;
 
+            this.checkCollision();
+
 
         },
         draw: function(screen) {
@@ -124,8 +126,16 @@
                     }
                     segment = segment.next
                 }
+        },
+        checkCollision: function(){
+            for (i=0; i<this.game.fruit.length; i++ ){
+                if (isCollision(this, this.game.fruit[i])){
+                    console.log('gotcha');
+                }
+            }    
         }
     }
+
     
 
 
@@ -225,6 +235,20 @@
                     body.size.x,
                     body.size.y);
     }
+
+
+    var isCollision = function(bodyA, bodyB){
+        if ((bodyB.centre.x-bodyB.size.x/2 < bodyA.centre.x) &&
+            (bodyB.centre.x+bodyB.size.x/2 > bodyA.centre.x) &&
+            (bodyB.centre.y-bodyB.size.y/2 < bodyA.centre.y) &&
+            (bodyB.centre.y+bodyB.size.y/2 > bodyA.centre.y) ){
+            console.log(bodyA.centre.x, bodyB.centre.x)
+            return true;
+        }
+        else
+            return false;
+    }
+
 
 
     window.addEventListener('load', function(){
