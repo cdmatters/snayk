@@ -26,7 +26,8 @@
             for (var i = 0; i< this.bodies.length; i++){
                 this.bodies[i].update();
             }
-            if (Math.random() > 0.995 && this.fruit.length==0){
+            if (Math.random() > 0.995 && this.fruit.length<3){
+                console.log('fruit added')
                 this.addFruit()
             }
         },
@@ -35,17 +36,26 @@
             this.origin.draw(screen);
             for (var i = 0; i< this.bodies.length; i++){
                 this.bodies[i].draw(screen);
+                
             }
+            for (var i = 0; i< this.fruit.length; i++){
+                this.fruit[i].draw(screen);
+                
+            }
+
+            
         },
         addBody: function(body){
             this.bodies.push(body);
         },
         addFruit: function(){
-            console.log('fruit added')
+            var fruitCentre = {x: Math.random()*this.size.x, y: Math.random()*this.size.y};
+            var points = Math.floor( Math.random()*5 ) + 1 
+            this.fruit.push( new Fruit(this, points, fruitCentre, 0));
+
         }
 
     };
-
 
 
     var Player = function(game) {
@@ -150,11 +160,11 @@
         }
     }
 
-    var Fruit = function (game, point_size, centre, velocity){
+    var Fruit = function (game, points, centre, velocity){
         this.game = game; 
         this.points = points;
         
-        this.size = {x:10, y:10};
+        this.size = {x:3+this.points, y:3+this.points};
         this.centre = centre;
         this.velocity = velocity;
     }
