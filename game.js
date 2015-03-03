@@ -42,8 +42,6 @@
 
 
 
-
-
     var Player = function(game) {
         this.game = game;
 
@@ -79,7 +77,7 @@
                 }               
              
             
-            this.storeThisPosition();
+            this.storeInTracks();
 
             this.polars.r += this.velocity.r;
             this.polars.theta += this.velocity.theta;
@@ -96,14 +94,10 @@
             this.centre.x = this.polars.r*Math.cos(this.polars.theta) + this.game.origin.centre.x;
             this.centre.y  = this.polars.r*Math.sin(this.polars.theta) + this.game.origin.centre.y;
         },
-        storeThisPosition: function(){
-            this.tracks.x.push(this.centre.x);
-            this.tracks.y.push(this.centre.y);
-            if (this.tracks.x.length>5 || this.tracks.y.length>5){
-                this.tracks.x.shift();
-                this.tracks.y.shift();
-            }
+        storeInTracks: function(){
+            storeThisPosition(this)
         },
+
         addTail: function(){
             segment = this
                 while (true){
@@ -115,50 +109,12 @@
                     segment = segment.next
                 }
         }
-
-        
-
     }
-        
-
-
-    var Keyboarder = function() {
-        var keyState = {};
-        window.addEventListener('keydown', function(e){
-            keyState[e.keyCode] = true;
-        });
-
-        window.addEventListener('keyup', function(e){
-            keyState[e.keyCode] = false;
-        })
-
-        this.isDown = function(keyCode){
-            return keyState[keyCode]===true;
-        };
-        this.KEYS = {LEFT: 37, RIGHT:39, UP:38, DOWN:40, ENTER:13}
-
-        }
     
 
 
-   var Origin = function(game){ //why?? function of game?
-       this.game = game;
-       this.size = {x:5, y:5};
-       this.centre = { x: this.game.size.x/2, y: this.game.size.y / 2};   
-    }
-
-    Origin.prototype = {
-        update: function(){
-            console.log('Only move this if you want insane mode');
-
-        },
-        draw: function(screen){
-            drawRect(screen, this);
-        }
-    }
-
-
     var BodyPart = function(game, previous){
+        
         this.game = game;
 
         this.size = {x:10, y:10};
@@ -175,29 +131,61 @@
 
         update: function(){
         
-        this.storeThisPosition()
+        this.storeInTracks()
         this.centre.x = this.prev.tracks.x[0] ;
         this.centre.y = this.prev.tracks.y[0] ;
         
-        },
-        
+        },        
         draw: function(screen){
             drawRect(screen, this)
-
         },
-        storeThisPosition: function(){
-            this.tracks.x.push(this.centre.x);
-            this.tracks.y.push(this.centre.y);
-            if (this.tracks.x.length>5 || this.tracks.y.length>5){
-                this.tracks.x.shift();
-                this.tracks.y.shift();
-
-            }
+        storeInTracks: function(){
+            storeThisPosition(this)
         }
-
-
     }
 
+
+   var Origin = function(game){ //why?? function of game?
+       this.game = game;
+       this.size = {x:5, y:5};
+       this.centre = { x: this.game.size.x/2, y: this.game.size.y / 2};   
+    }
+
+    Origin.prototype = {
+        update: function(){
+            console.log('Only move this if you want insane mode');
+        },
+        draw: function(screen){
+            drawRect(screen, this);
+        }
+    }
+
+
+    var Keyboarder = function() {
+        var keyState = {};
+        window.addEventListener('keydown', function(e){
+            keyState[e.keyCode] = true;
+        });
+
+        window.addEventListener('keyup', function(e){
+            keyState[e.keyCode] = false;
+        })
+
+        this.isDown = function(keyCode){
+            return keyState[keyCode]===true;
+        };
+        this.KEYS = {LEFT: 37, RIGHT:39, UP:38, DOWN:40, ENTER:13}
+        }
+
+    var storeThisPosition = function(segment){
+        var memory = 5;
+        segment.tracks.x.push(segment.centre.x);
+        segment.tracks.y.push(segment.centre.y);
+        if (segment.tracks.x.length>memory || segment.tracks.y.length>memory){
+            segment.tracks.x.shift();
+            segment.tracks.y.shift();
+        }
+    }
 
     var drawRect = function(screen, body){
         screen.fillRect(body.centre.x - body.size.x/2,
