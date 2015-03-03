@@ -33,6 +33,8 @@
         },
         draw: function(screen){
             screen.clearRect(0, 0, this.size.x, this.size.y);
+            screen.rect(0,0,this.size.x, this.size.y);
+            screen.stroke();
             this.origin.draw(screen);
             for (var i = 0; i< this.bodies.length; i++){
                 this.bodies[i].draw(screen);
@@ -50,8 +52,10 @@
         },
         addFruit: function(){
             var fruitCentre = {x: Math.random()*this.size.x, y: Math.random()*this.size.y};
-            var points = Math.floor( Math.random()*5 ) + 1 
-            this.fruit.push( new Fruit(this, points, fruitCentre, 0));
+            var points = Math.floor( Math.random()*5 ) + 1 ;
+            var colour = randomColours[Math.floor(Math.random()*randomColours.length)]
+            console.log(colour)
+            this.fruit.push( new Fruit(this, points, fruitCentre, colour, 0));
 
         }
 
@@ -65,7 +69,7 @@
         this.polars = {r: 100, theta: 0}
         this.centre = { x: this.game.size.x/2 +this.polars.r , y: this.game.size.y / 2}
         
-        this.velocity = {r: 0, theta: 0.02}
+        this.velocity = {r: 0, theta: 0.008}
         this.keyboarder = new Keyboarder();
 
         this.next = null
@@ -77,17 +81,17 @@
     Player.prototype = {
         update: function(){
             if (this.keyboarder.isDown(this.keyboarder.KEYS.UP)){
-                this.velocity.r = 2;
+                this.velocity.r = 1;
                 this.velocity.theta = 0;             
             } else if (this.keyboarder.isDown(this.keyboarder.KEYS.DOWN)){
-                this.velocity.r = -2;
+                this.velocity.r = -1;
                 this.velocity.theta = 0;
             } else if (this.keyboarder.isDown(this.keyboarder.KEYS.LEFT)){
                 this.velocity.r = 0;
-                this.velocity.theta = -0.02
+                this.velocity.theta = -0.008
             } else if (this.keyboarder.isDown(this.keyboarder.KEYS.RIGHT)){
                 this.velocity.r = 0;
-                this.velocity.theta = 0.02;
+                this.velocity.theta = 0.008;
             } else if (this.keyboarder.isDown(this.keyboarder.KEYS.ENTER)){
                 this.addTail()
                 }               
@@ -174,18 +178,20 @@
         }
     }
 
-    var Fruit = function (game, points, centre, velocity){
+    var Fruit = function (game, points, centre, colour, velocity){
         this.game = game; 
         this.points = points;
+        this.colour = colour
         
-        this.size = {x:3+this.points, y:3+this.points};
+        this.size = {x:5+this.points, y:5+this.points};
         this.centre = centre;
         this.velocity = velocity;
     }
 
     Fruit.prototype = {
        draw: function(screen){
-            drawRect(screen, this)
+            drawRect(screen, this, this.colour)
+
        }
     }
 
@@ -233,7 +239,16 @@
         }
     }
 
-    var drawRect = function(screen, body){
+    var drawRect = function(screen, body, colour){
+        var drawColour = colour
+        if (colour === undefined){
+            drawColour = '#000000'
+        } else if (colour === 'random')
+            drawColour = randomColours[Math.floor(Math.random()*randomColours.length)]
+
+        
+
+        screen.fillStyle= drawColour;
         screen.fillRect(body.centre.x - body.size.x/2,
                     body.centre.y - body.size.y/2,
                     body.size.x,
@@ -242,10 +257,10 @@
 
 
     var isCollision = function(bodyA, bodyB){
-        if ((bodyB.centre.x-bodyB.size.x/2 < bodyA.centre.x) &&
-            (bodyB.centre.x+bodyB.size.x/2 > bodyA.centre.x) &&
-            (bodyB.centre.y-bodyB.size.y/2 < bodyA.centre.y) &&
-            (bodyB.centre.y+bodyB.size.y/2 > bodyA.centre.y) ){
+        if ((bodyB.centre.x-bodyB.size.x/2 < bodyA.centre.x+bodyA.size.x/2) &&
+            (bodyB.centre.x+bodyB.size.x/2 > bodyA.centre.x-bodyA.size.x/2) &&
+            (bodyB.centre.y-bodyB.size.y/2 < bodyA.centre.y+bodyA.size.y/2) &&
+            (bodyB.centre.y+bodyB.size.y/2 > bodyA.centre.y-bodyA.size.y/2) ){
             console.log(bodyA.centre.x, bodyB.centre.x)
             return true;
         }
@@ -253,6 +268,7 @@
             return false;
     }
 
+    var randomColours = ['#7bf6b6', '#00b8ff', '#fb9800', '#f28686', ] 
 
 
     window.addEventListener('load', function(){
