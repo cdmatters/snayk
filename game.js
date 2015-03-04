@@ -20,18 +20,23 @@
 
         var self = this;
         var ticker = 0;
-        var tick = function(){
+        var tick = function(){   //this is ugly sort it
             
             if (self.isOver ==false){
                 self.update();
                 self.draw(screen);
             }
-            if (self.isOver==true){
+            else if (self.isOver==true){
                 if (ticker%5==0) { 
-                    self.bodies.pop();
+                    if (self.bodies.length()!=0){
+                        self.bodies.pop();
+                    } else 
+                    endSequence()
                 }
+                
                 ticker += 1
                 self.draw(screen);
+
             }
             requestAnimationFrame(tick);
             
@@ -309,6 +314,10 @@
         }
         else
             return false;
+    }
+
+    var endSequence = function(){
+        console.log('game over')
     }
 
 
