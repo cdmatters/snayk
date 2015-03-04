@@ -7,6 +7,10 @@
     var Game = function () {
         var screen = document.getElementById('screen').getContext('2d');
         this.size = {x:screen.canvas.width, y:screen.canvas.height};
+        screen.lineWidth = '6';
+        screen.rect(0,0,this.size.x, this.size.y);
+        screen.stroke();
+
         this.bodies = [new Player(this)]
         this.origin = new Origin(this)
         this.fruit = []
@@ -26,15 +30,15 @@
             for (var i = 0; i< this.bodies.length; i++){
                 this.bodies[i].update();
             }
-            if (Math.random() > 0.995 && this.fruit.length<3){
+            if (Math.random() > 0.99570 && this.fruit.length<10){
                 console.log('fruit added')
                 this.addFruit()
             }
         },
         draw: function(screen){
-            screen.clearRect(0, 0, this.size.x, this.size.y);
-            screen.rect(0,0,this.size.x, this.size.y);
-            screen.stroke();
+            screen.clearRect(3, 3, this.size.x-6, this.size.y-6);
+            
+
             this.origin.draw(screen);
             for (var i = 0; i< this.bodies.length; i++){
                 this.bodies[i].draw(screen);
@@ -48,11 +52,11 @@
             
         },
         addBody: function(body){
-            this.bodies.push(body);
+            this.bodies.unshift(body);
         },
         addFruit: function(){
             var fruitCentre = {x: Math.random()*this.size.x, y: Math.random()*this.size.y};
-            var points = Math.floor( Math.random()*5 ) + 1 ;
+            var points = Math.floor( Math.random()*4 ) + 1 ;
             var colour = randomColours[Math.floor(Math.random()*randomColours.length)]
             console.log(colour)
             this.fruit.push( new Fruit(this, points, fruitCentre, colour, 0));
@@ -68,8 +72,9 @@
         this.size = { x: 10, y: 10};
         this.polars = {r: 100, theta: 0}
         this.centre = { x: this.game.size.x/2 +this.polars.r , y: this.game.size.y / 2}
+        this.colour = '#000000'
         
-        this.velocity = {r: 0, theta: 0.008}
+        this.velocity = {r: 0, theta: 0.02}
         this.keyboarder = new Keyboarder();
 
         this.next = null
@@ -81,22 +86,28 @@
     Player.prototype = {
         update: function(){
             if (this.keyboarder.isDown(this.keyboarder.KEYS.UP)){
-                this.velocity.r = 1;
+                if (this.polars.r >=0){
+                    this.velocity.r = 1.5;
+                } else
+                    this.velocity.r = -1.5;
                 this.velocity.theta = 0;             
             } else if (this.keyboarder.isDown(this.keyboarder.KEYS.DOWN)){
-                this.velocity.r = -1;
+                if (this.polars.r>=0){
+                    this.velocity.r = -1.5;
+                } else 
+                    this.velocity.r = 1.5;
                 this.velocity.theta = 0;
             } else if (this.keyboarder.isDown(this.keyboarder.KEYS.LEFT)){
                 this.velocity.r = 0;
-                this.velocity.theta = -0.008
+                this.velocity.theta = -0.0125;
             } else if (this.keyboarder.isDown(this.keyboarder.KEYS.RIGHT)){
                 this.velocity.r = 0;
-                this.velocity.theta = 0.008;
+                this.velocity.theta = 0.0125;
             } else if (this.keyboarder.isDown(this.keyboarder.KEYS.ENTER)){
                 this.addTail()
                 }               
              
-            
+
             this.storeInTracks();
 
             this.polars.r += this.velocity.r;
@@ -109,7 +120,7 @@
 
         },
         draw: function(screen) {
-            drawRect(screen, this);
+            drawRect(screen, this, this.colour);
         },
 
         toCartesian: function(){
@@ -200,7 +211,9 @@
    var Origin = function(game){ //why?? function of game?
        this.game = game;
        this.size = {x:5, y:5};
-       this.centre = { x: this.game.size.x/2, y: this.game.size.y / 2};   
+       this.centre = { x: this.game.size.x/2, y: this.game.size.y / 2}; 
+
+       this.colour = '#ffffff'  
     }
 
     Origin.prototype = {
@@ -208,7 +221,7 @@
             console.log('Only move this if you want insane mode');
         },
         draw: function(screen){
-            drawRect(screen, this);
+            drawRect(screen, this, this.colour);
         }
     }
 
@@ -230,7 +243,7 @@
         }
 
     var storeThisPosition = function(segment){
-        var memory = 5;
+        var memory = 8;
         segment.tracks.x.push(segment.centre.x);
         segment.tracks.y.push(segment.centre.y);
         if (segment.tracks.x.length>memory || segment.tracks.y.length>memory){
@@ -268,7 +281,7 @@
             return false;
     }
 
-    var randomColours = ['#7bf6b6', '#00b8ff', '#fb9800', '#f28686', ] 
+    var randomColours = ['#5ABA47']//['#7bf6b6', '#00b8ff', '#fb9800', '#f28686', ] 
 
 
     window.addEventListener('load', function(){
