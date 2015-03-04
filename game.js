@@ -17,36 +17,27 @@
         this.fruit = [];
 
         this.isOver = false;
+        this.endTicker =0
 
         var self = this;
-        var ticker = 0;
-        var tick = function(){   //this is ugly sort it
-            
-            if (self.isOver ==false){
-                self.update();
-                self.draw(screen);
-            }
-            else if (self.isOver==true){
-                if (ticker%5==0) { 
-                    if (self.bodies.length!==0){
-                        self.bodies.pop();
-                    } else {
-                    screen.font = '40px Georgia';
-                    self.draw(screen);
-                    screen.fillText("GAME OVER", self.size.x/2, self.size.y/2);
-                    
-                    endSequence(screen)
-                    return true
-                    }
-                }
-                
-                ticker += 1
-                self.draw(screen);
 
-            }
-            requestAnimationFrame(tick);
+        var tick = function(){  
             
+
+            if (self.isOver === true){
+                self.endSequence();
+                self.endTicker +=1;
+                if (self.bodies.length === 0){ 
+                    self.printGameOver(screen);
+                    return true;
+                }                     
+            } else {
+                self.update();
+            }
+            self.draw(screen);
+            requestAnimationFrame(tick);
         };
+
         tick();
     };
 
@@ -73,7 +64,6 @@
                 this.fruit[i].draw(screen);
                 
             }
-
             
         },
         addBody: function(body){
@@ -85,7 +75,23 @@
             var colour = randomColours[Math.floor(Math.random()*randomColours.length)]
             this.fruit.push( new Fruit(this, points, fruitCentre, colour, 0));
 
+        },
+        endSequence: function(){
+            if (this.bodies.length>0) { 
+                if (this.endTicker%7==0) 
+                    this.bodies.pop();
+            }
+        },
+        printGameOver: function(screen){
+                    screen.font = '40px Georgia';
+                    this.draw(screen)
+                    screen.fillText("GAME OVER", this.size.x/2, this.size.y/2);                    
         }
+
+        
+                
+            //self.draw(screen);
+            //requestAnimationFrame(endSequence);
 
     };
 
@@ -253,7 +259,7 @@
        this.size = {x:1, y:1};
        this.centre = { x: this.game.size.x/2, y: this.game.size.y / 2}; 
 
-       this.colour = '#d3d3d3'  
+       this.colour = '#000000'  
     }
 
     Origin.prototype = {
@@ -322,9 +328,6 @@
             return false;
     }
 
-    var endSequence = function(screen){
-        
-    }
 
 
     var randomColours = ['#5ABA47']//['#7bf6b6', '#00b8ff', '#fb9800', '#f28686', ] 
