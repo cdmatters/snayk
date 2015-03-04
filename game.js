@@ -80,7 +80,7 @@
             this.bodies.unshift(body);
         },
         addFruit: function(){
-            var fruitCentre = {x: Math.random()*this.size.x, y: Math.random()*this.size.y};
+            var fruitCentre = {x: 10+ Math.random()*(this.size.x-20), y: 10+ Math.random()*(this.size.y-20)};
             var points = Math.floor( Math.random()*4 ) + 1 ;
             var colour = randomColours[Math.floor(Math.random()*randomColours.length)]
             this.fruit.push( new Fruit(this, points, fruitCentre, colour, 0));
@@ -234,7 +234,7 @@
         this.points = points;
         this.colour = colour
         
-        this.size = {x:5+this.points, y:5+this.points};
+        this.size = {x:9-this.points, y:9-this.points};
         this.centre = centre;
         this.velocity = velocity;
     }
