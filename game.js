@@ -30,8 +30,14 @@
                 if (ticker%5==0) { 
                     if (self.bodies.length!==0){
                         self.bodies.pop();
-                    } else 
-                    endSequence()
+                    } else {
+                    screen.font = '40px Georgia';
+                    self.draw(screen);
+                    screen.fillText("GAME OVER", self.size.x/2, self.size.y/2);
+                    
+                    endSequence(screen)
+                    return true
+                    }
                 }
                 
                 ticker += 1
@@ -57,7 +63,7 @@
         },
         draw: function(screen){
             screen.clearRect(3, 3, this.size.x-6, this.size.y-6);
-            screen.fillText(this.score, 20,30)
+            screen.fillText(this.score, 30,40)
             this.origin.draw(screen);
             for (var i = 0; i< this.bodies.length; i++){
                 this.bodies[i].draw(screen);
@@ -316,8 +322,8 @@
             return false;
     }
 
-    var endSequence = function(){
-        console.log('game over')
+    var endSequence = function(screen){
+        
     }
 
 
