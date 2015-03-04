@@ -10,35 +10,49 @@
         screen.lineWidth = '6';
         screen.rect(0,0,this.size.x, this.size.y);
         screen.stroke();
+        screen.font = '20px Georgia';
 
-        this.bodies = [new Player(this)]
-        this.origin = new Origin(this)
-        this.fruit = []
+        this.bodies = [new Player(this)];
+        this.origin = new Origin(this);
+        this.fruit = [];
+
+        this.isOver = false;
 
         var self = this;
+        var ticker = 0;
         var tick = function(){
-            self.update();
-            self.draw(screen);
+            
+            if (self.isOver ==false){
+                self.update();
+                self.draw(screen);
+            }
+            if (self.isOver==true){
+                if (ticker%5==0) { 
+                    self.bodies.pop();
+                }
+                ticker += 1
+                self.draw(screen);
+            }
             requestAnimationFrame(tick);
+            
         };
         tick();
     };
 
     Game.prototype = {
         update: function(){
+            this.score = this.bodies.length - 1
             this.origin.update();
             for (var i = 0; i< this.bodies.length; i++){
                 this.bodies[i].update();
             }
             if (Math.random() > 0.99570 && this.fruit.length<10){
-                console.log('fruit added')
                 this.addFruit()
             }
         },
         draw: function(screen){
             screen.clearRect(3, 3, this.size.x-6, this.size.y-6);
-            
-
+            screen.fillText(this.score, 20,30)
             this.origin.draw(screen);
             for (var i = 0; i< this.bodies.length; i++){
                 this.bodies[i].draw(screen);
@@ -58,7 +72,6 @@
             var fruitCentre = {x: Math.random()*this.size.x, y: Math.random()*this.size.y};
             var points = Math.floor( Math.random()*4 ) + 1 ;
             var colour = randomColours[Math.floor(Math.random()*randomColours.length)]
-            console.log(colour)
             this.fruit.push( new Fruit(this, points, fruitCentre, colour, 0));
 
         }
@@ -111,9 +124,7 @@
                     this.velocity.r = 0;
                     this.velocity.theta = 0.0125;
                 }
-            } else if (this.keyboarder.isDown(this.keyboarder.KEYS.ENTER)){
-                this.addTail()
-                }               
+            }              
              
 
             this.storeInTracks();
@@ -124,6 +135,7 @@
             this.toCartesian(this.polars.r, this.polars.theta) ;
 
             this.checkCollision();
+            this.checkOutOfBounds();
 
 
         },
@@ -157,9 +169,18 @@
                         this.addTail();
                     }
                     this.game.fruit.splice(i,1);
-
                 }
-            }    
+
+            }
+            
+             
+
+        },
+        checkOutOfBounds: function(){
+            if (this.centre.x < 0 || this.centre.x > this.game.size.x ||
+                this.centre.y < 0 || this.centre.y > this.game.size.y){
+                this.game.isOver = true
+            }
         }
     }
 
@@ -218,10 +239,10 @@
 
    var Origin = function(game){ //why?? function of game?
        this.game = game;
-       this.size = {x:5, y:5};
+       this.size = {x:1, y:1};
        this.centre = { x: this.game.size.x/2, y: this.game.size.y / 2}; 
 
-       this.colour = '#ffffff'  
+       this.colour = '#d3d3d3'  
     }
 
     Origin.prototype = {
@@ -260,6 +281,7 @@
         }
     }
 
+
     var drawRect = function(screen, body, colour){
         var drawColour = colour
         if (colour === undefined){
@@ -267,13 +289,13 @@
         } else if (colour === 'random')
             drawColour = randomColours[Math.floor(Math.random()*randomColours.length)]
 
-        
 
         screen.fillStyle= drawColour;
         screen.fillRect(body.centre.x - body.size.x/2,
                     body.centre.y - body.size.y/2,
                     body.size.x,
                     body.size.y);
+        screen.fillStyle= '#000000';
     }
 
 
@@ -288,6 +310,7 @@
         else
             return false;
     }
+
 
     var randomColours = ['#5ABA47']//['#7bf6b6', '#00b8ff', '#fb9800', '#f28686', ] 
 
