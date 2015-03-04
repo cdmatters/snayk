@@ -28,7 +28,7 @@
             }
             else if (self.isOver==true){
                 if (ticker%5==0) { 
-                    if (self.bodies.length()!=0){
+                    if (self.bodies.length!==0){
                         self.bodies.pop();
                     } else 
                     endSequence()
