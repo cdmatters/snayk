@@ -146,6 +146,7 @@
             this.toCartesian(this.polars.r, this.polars.theta);
 
             this.checkCollision();
+            this.checkSelfCollision();
             this.checkOutOfBounds();
 
         },
@@ -179,6 +180,16 @@
                     this.game.fruit.splice(i,1);
                 }
             }
+        },
+        checkSelfCollision: function(){
+            for (var i=0; i<this.game.bodies.length-1; i++){
+                if(collidedWithTracks(this.centre, this.game.bodies[i].tracks)){
+                    this.game.isOver= true;
+                    console.log(this.game.isOver)
+
+                };
+            }
+
         },
         checkOutOfBounds: function(){
             if (this.centre.x < 0 || this.centre.x > this.game.size.x ||
@@ -244,7 +255,7 @@
 
     Origin.prototype = {
         update: function(){
-            console.log('Only move this if you want insane mode');
+            //'Only move this if you want insane mode'
         },
         draw: function(screen){
             drawRect(screen, this, this.colour);
@@ -305,6 +316,20 @@
         }
         else
             return false;
+    }
+
+    var collidedWithTracks = function(head, tracks){
+        var bucket = 3;
+        for (var i=0; i<tracks.x.length; i++){
+            if (Math.floor(head.x/bucket)==Math.floor(tracks.x[i]/bucket) &&
+                Math.floor(head.y/bucket)==Math.floor(tracks.y[i]/bucket) ){
+                console.log(head.x,head.y)
+                return true;
+            }
+        }
+        return false;
+
+        
     }
 
     var randomColours = ['#5ABA47'];//['#7bf6b6', '#00b8ff', '#fb9800', '#f28686', ] 
