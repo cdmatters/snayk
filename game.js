@@ -86,23 +86,31 @@
     Player.prototype = {
         update: function(){
             if (this.keyboarder.isDown(this.keyboarder.KEYS.UP)){
-                if (this.polars.r >=0){
-                    this.velocity.r = 1.5;
-                } else
-                    this.velocity.r = -1.5;
-                this.velocity.theta = 0;             
+                if (this.velocity.r ==0){
+                    if (this.polars.r >=0){
+                        this.velocity.r = 1.5;
+                    } else
+                        this.velocity.r = -1.5;
+                    this.velocity.theta = 0;
+                }             
             } else if (this.keyboarder.isDown(this.keyboarder.KEYS.DOWN)){
-                if (this.polars.r>=0){
-                    this.velocity.r = -1.5;
-                } else 
-                    this.velocity.r = 1.5;
-                this.velocity.theta = 0;
+                if (this.velocity.r ==0){
+                    if (this.polars.r>=0){
+                        this.velocity.r = -1.5;
+                    } else 
+                        this.velocity.r = 1.5;
+                    this.velocity.theta = 0;
+                }
             } else if (this.keyboarder.isDown(this.keyboarder.KEYS.LEFT)){
-                this.velocity.r = 0;
-                this.velocity.theta = -0.0125;
+                if (this.velocity.theta == 0){
+                    this.velocity.r = 0;
+                    this.velocity.theta = -0.0125;
+                }
             } else if (this.keyboarder.isDown(this.keyboarder.KEYS.RIGHT)){
-                this.velocity.r = 0;
-                this.velocity.theta = 0.0125;
+                if (this.velocity.theta == 0){
+                    this.velocity.r = 0;
+                    this.velocity.theta = 0.0125;
+                }
             } else if (this.keyboarder.isDown(this.keyboarder.KEYS.ENTER)){
                 this.addTail()
                 }               
