@@ -1,8 +1,3 @@
-/*ideas
-*  move the origin
-*  flip reverse head if you flip th e
-*/
-
 ;(function (){
     var Game = function () {
         var screen = document.getElementById('screen').getContext('2d');
