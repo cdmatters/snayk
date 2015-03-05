@@ -6,6 +6,7 @@
     <style> 
       .rules {
         padding-left: 10px;
+        display:inline;
       }
       .details{
         font-size: small;
@@ -13,34 +14,60 @@
       .filler {
         width: 30px;
       }
+      .filler2{
+        width:50px;
+      }
       body.noscroll {
         position:fixed;
+        overflow-x:scroll;
         overflow-y: scroll;
         /*width: 100%;*/
       }
-      </style>
 
+      </style>
+    <script> var userName = 'MysteryPerson'</script>
+    <script src='loadhighscores.js'></script>
     <script src = 'game.js'> </script>
   </head>
   <body class='noscroll'>
-    <canvas id='screen' width='600' height = '480'></canvas>
-    <p class='rules'><strong>SNAYK</strong><br><em>-an almost familiar game</em></p>
-    <p>
+    <canvas id='screen' width='600' height = '480' ></canvas>
+    <p class='rules'><br><strong>SNAYK</strong><br>
+      <em style='padding-left:15px'>-an almost familiar game</em></p>
       <span>
         <table class='details'>
+         <tr>
+            <td></td>
+            <td></td>
+            <td class='filler'></td>
+            <td></td>
+            <td></td>
+            <td>
+              <button onclick='userName = document.getElementById("user").elements[0].value; localStorage.setItem("-1",userName)'>User
+              </button>
+            </td>
+            <td> 
+              <form id='user' >
+                <input  type='text' name='fname' style='width:60%;'>
+              </form>
+            </td
+          </tr> 
           <tr>
             <td><strong>&uarr; (UP)</strong></td>
             <td>Move away from centre</td>
             <td class='filler'></td>
             <td><strong>T</strong></td>
             <td>View origin and no-turn-zone</td>
+            <td class='filler2'></td>
+            <td><strong>HIGHEST SCORES</strong></td>
           </tr>
           <tr>
             <td><strong>&darr; (DOWN)<strong></td>
             <td>Move towards centre </td>
             <td class='filler'></td>
-            <td></td>
-            <td></td>
+            <td><strong> (SPACE)</td>
+            <td>Double Dash</td>
+            <td class='filler2'></td>
+            <td id='highscore1'><em></em></td>
           </tr>
           <tr>
             <td><strong>&larr; (LEFT)</strong></td>
@@ -48,6 +75,8 @@
             <td class='filler'></td>
             <td></td>
             <td></td>
+            <td class'filler2'></td>
+            <td id='highscore2'><em></em></td>
           </tr>
           <tr>
             <td><strong>&rarr; (RIGHT)<strong></td>
@@ -55,8 +84,12 @@
             <td class='filler'></td>
             <td></td>
             <td></td>
+            <td class'filler2'></td>
+            <td id='highscore3'><em></em></td>
           </tr>
         </table>
       </span>
+
+  <script>displayHighScores();</script>
   </body>
 </html>

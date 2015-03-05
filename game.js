@@ -13,6 +13,7 @@
 
         this.isOver = false;
         this.endTicker =0;
+
         
         var self = this;
 
@@ -23,6 +24,7 @@
                 self.endTicker +=1;
                 if (self.bodies.length === 0){ 
                     self.printGameOver(screen);
+                    storeHighScore(self.score);
                     return true;
                 }                     
             } else {
@@ -389,6 +391,19 @@
     }
 
     var randomColours = ['#5ABA47'];  //'Hacker School' Green
+
+    function storeHighScore(aScore){
+        if (typeof(Storage) !== "undefined") {
+            
+            if (localStorage.getItem(aScore) ==null){
+                localStorage.setItem(aScore, userName)
+            }
+            console.log(aScore, userName)
+        } else{
+             console.log('Sorry! No Web Storage support...')
+        }
+
+    }
 
     window.addEventListener('load', function(){
         new Game();
