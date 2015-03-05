@@ -93,7 +93,7 @@
         this.centre = { x: this.game.size.x/2 + this.polars.r , y: this.game.size.y/2};
         this.colour = '#000000';
         
-        this.velocity = {r: 0, theta: 0.02};
+        this.velocity = {r: 0, theta: 0.0125};
         this.keyboarder = new Keyboarder();
 
         this.next = null;
@@ -134,7 +134,30 @@
                         this.velocity.theta = 0.0125;
                     }
                 }
-            }              
+            } 
+
+            if (this.keyboarder.isDown(this.keyboarder.KEYS.SPACE)){
+                if (this.velocity.r == 1.5){
+                    this.velocity.r = 3
+                } else if (this.velocity.r == -1.5){
+                    this.velocity.r = -3
+                } else if (this.velocity.theta == 0.0125){
+                    this.velocity.theta = 0.025
+                } else if (this.velocity.theta == -0.0125){
+                    this.velocity.theta = -0.025
+                }
+            } else {
+                if (this.velocity.r == 3){
+                    this.velocity.r = 1.5
+                } else if (this.velocity.r == -3){
+                    this.velocity.r = -1.5
+                } else if (this.velocity.theta == 0.025){
+                    this.velocity.theta = 0.0125
+                } else if (this.velocity.theta == -0.025){
+                    this.velocity.theta = -0.0125
+                }
+            }
+                            
              
 
             this.storeInTracks();
@@ -246,18 +269,40 @@
 
    var Origin = function(game){ //why?? function of game?
        this.game = game;
-       this.size = {x:1, y:1};
+       this.size = {x:3, y:3};
        this.centre = { x: this.game.size.x/2, y: this.game.size.y / 2}; 
+       this.noTurnCircle = {x:this.centre.x, y:this.centre.y, r:20}
 
-       this.colour = '#d3d3d3';  
+       this.keyboarder = new Keyboarder()
+       this.colour = '#ffffff';  
+       this.turnColour = '#ffffff';
+
     }
 
     Origin.prototype = {
         update: function(){
+            if (this.keyboarder.isDown(this.keyboarder.KEYS.SPACE)){
+                this.noTurnCircle.r = 10;
+            } else {
+                this.noTurnCircle.r = 20;
+            }
+
+            if (this.keyboarder.isDown(this.keyboarder.KEYS.T)){
+                this.colour = '#000000';
+                this.turnColour = '#ff0000';
+            } else {
+                this.colour ='#ffffff';
+                this.turnColour = '#ffffff';
+            }
+
+
+            
+
             //'Only move this if you want insane mode'
         },
         draw: function(screen){
             drawRect(screen, this, this.colour);
+            drawCircle(screen, this.noTurnCircle, this.turnColour);
         }
     }
 
@@ -275,7 +320,7 @@
         this.isDown = function(keyCode){
             return keyState[keyCode]===true;
         };
-        this.KEYS = {LEFT: 37, RIGHT:39, UP:38, DOWN:40, ENTER:13};
+        this.KEYS = {LEFT: 37, RIGHT:39, UP:38, DOWN:40, SPACE:32, T:84};
         }
 
     var storeThisPosition = function(segment){
@@ -293,8 +338,7 @@
         var drawColour = colour;
         if (colour === undefined){
             drawColour = '#000000';
-        } else if (colour === 'random')
-            drawColour = randomColours[Math.floor(Math.random()*randomColours.length)];
+        } 
 
         screen.fillStyle= drawColour;
         screen.fillRect(body.centre.x - body.size.x/2,
@@ -303,7 +347,21 @@
                     body.size.y);
         screen.fillStyle= '#000000';
     }
+ 
+    var drawCircle = function(screen, body, colour){
+        var drawColour = colour;
+        if (colour ===undefined){
+            drawColour = '#000000'
+        }
 
+        screen.strokeStyle = drawColour;
+        screen.lineWidth = 0.5;
+        screen.beginPath();
+        screen.arc(body.x,body.y, body.r, 0, 2*Math.PI);
+        screen.stroke();
+        
+
+    }
 
     var isCollision = function(bodyA, bodyB){
         if ((bodyB.centre.x-bodyB.size.x/2 < bodyA.centre.x+bodyA.size.x/2) &&
@@ -330,7 +388,7 @@
         
     }
 
-    var randomColours = ['#5ABA47'];//['#7bf6b6', '#00b8ff', '#fb9800', '#f28686', ] 
+    var randomColours = ['#5ABA47'];  //'Hacker School' Green
 
     window.addEventListener('load', function(){
         new Game();
