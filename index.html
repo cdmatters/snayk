@@ -1,10 +1,62 @@
 <!doctype html>
 <html>
   <head>
+    <link href='s.ico' rel="shortcut icon">
     <title> snayk </title>
+    <style> 
+      .rules {
+        padding-left: 10px;
+      }
+      .details{
+        font-size: small;
+      }
+      .filler {
+        width: 30px;
+      }
+      body.noscroll {
+        position:fixed;
+        overflow-y: scroll;
+        width= 100%;
+      }
+      </style>
+
     <script src = 'game.js'> </script>
   </head>
-  <body>
+  <body class='noscroll'>
     <canvas id='screen' width='600' height = '480'></canvas>
+    <p class='rules'><strong>SNAYK</strong><br><em>-an almost familiar game</em></p>
+    <p>
+      <span>
+        <table class='details'>
+          <tr>
+            <td><strong>&uarr; (UP)</strong></td>
+            <td>Move away from centre</td>
+            <td class='filler'></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td><strong>&darr; (DOWN)<strong></td>
+            <td>Move towards centre </td>
+            <td class='filler'></td>
+            <td><strong>T<strong></td>
+            <td>View origin and no-turn-zone</td>
+          </tr>
+          <tr>
+            <td><strong>&larr; (LEFT)</strong></td>
+            <td>Move anticlockwise </td>
+            <td class='filler'></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td><strong>&rarr; (RIGHT)<strong></td>
+            <td>Move clockwise</td>
+            <td class='filler'></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
+      </span>
   </body>
 </html>

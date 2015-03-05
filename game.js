@@ -126,14 +126,18 @@
                     this.velocity.theta = 0;
                 }
             } else if (this.keyboarder.isDown(this.keyboarder.KEYS.LEFT)){
-                if (this.velocity.theta == 0){
-                    this.velocity.r = 0;
-                    this.velocity.theta = -0.0125;
+                if (this.polars.r > 5 || this.polars.r<-5){
+                    if (this.velocity.theta == 0){
+                        this.velocity.r = 0;
+                        this.velocity.theta = -0.0125;
+                    }
                 }
             } else if (this.keyboarder.isDown(this.keyboarder.KEYS.RIGHT)){
-                if (this.velocity.theta == 0){
-                    this.velocity.r = 0;
-                    this.velocity.theta = 0.0125;
+                if (this.polars.r > 5 || this.polars.r<-5){
+                    if (this.velocity.theta == 0){
+                        this.velocity.r = 0;
+                        this.velocity.theta = 0.0125;
+                    }
                 }
             }              
              
@@ -250,7 +254,7 @@
        this.size = {x:1, y:1};
        this.centre = { x: this.game.size.x/2, y: this.game.size.y / 2}; 
 
-       this.colour = '#000000';  
+       this.colour = '#d3d3d3';  
     }
 
     Origin.prototype = {
@@ -319,11 +323,10 @@
     }
 
     var collidedWithTracks = function(head, tracks){
-        var bucket = 3;
+        var bucket = 2;
         for (var i=0; i<tracks.x.length; i++){
             if (Math.floor(head.x/bucket)==Math.floor(tracks.x[i]/bucket) &&
                 Math.floor(head.y/bucket)==Math.floor(tracks.y[i]/bucket) ){
-                console.log(head.x,head.y)
                 return true;
             }
         }
