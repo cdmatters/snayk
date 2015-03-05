@@ -24,7 +24,8 @@ var displayHighScores = function(){
 
 var userName 
 if (localStorage.getItem('-1') == null){
-    userName = 'MysteryPerson';
+    var randomNameList = ['Leo Euler', 'Pedro Laplace', 'Joe Lagrange', 'Bill Hamilton','Mystery Person']
+    userName = randomNameList[Math.floor(Math.random()*randomNameList.length)]
 } else {
     userName = localStorage.getItem('-1');
 }
