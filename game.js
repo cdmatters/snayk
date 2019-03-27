@@ -106,7 +106,8 @@
 
     Player.prototype = {
         update: function(){
-            if (this.keyboarder.isDown(this.keyboarder.KEYS.UP)){
+            if (this.keyboarder.isDown(this.keyboarder.KEYS.UP)
+              || this.keyboarder.isDown(this.keyboarder.KEYS.K)){
                 if (this.velocity.r ==0){
                     if (this.polars.r >=0){
                         this.velocity.r = 1.5;
@@ -114,7 +115,8 @@
                         this.velocity.r = -1.5;
                     this.velocity.theta = 0;
                 }             
-            } else if (this.keyboarder.isDown(this.keyboarder.KEYS.DOWN)){
+            } else if (this.keyboarder.isDown(this.keyboarder.KEYS.DOWN)
+               || this.keyboarder.isDown(this.keyboarder.KEYS.J)){
                 if (this.velocity.r ==0){
                     if (this.polars.r>=0){
                         this.velocity.r = -1.5;
@@ -122,14 +124,16 @@
                         this.velocity.r = 1.5;
                     this.velocity.theta = 0;
                 }
-            } else if (this.keyboarder.isDown(this.keyboarder.KEYS.LEFT)){
+            } else if (this.keyboarder.isDown(this.keyboarder.KEYS.LEFT)
+               || this.keyboarder.isDown(this.keyboarder.KEYS.H)){
                 if (this.polars.r > 5 || this.polars.r<-5){
                     if (this.velocity.theta == 0){
                         this.velocity.r = 0;
                         this.velocity.theta = -0.0125;
                     }
                 }
-            } else if (this.keyboarder.isDown(this.keyboarder.KEYS.RIGHT)){
+            } else if (this.keyboarder.isDown(this.keyboarder.KEYS.RIGHT)
+               || this.keyboarder.isDown(this.keyboarder.KEYS.L)){
                 if (this.polars.r > 5 || this.polars.r<-5){
                     if (this.velocity.theta == 0){
                         this.velocity.r = 0;
@@ -322,7 +326,8 @@
         this.isDown = function(keyCode){
             return keyState[keyCode]===true;
         };
-        this.KEYS = {LEFT: 37, RIGHT:39, UP:38, DOWN:40, SPACE:32, T:84};
+        this.KEYS = {LEFT: 37, RIGHT:39, UP:38, DOWN:40, SPACE:32, T:84,
+                     H:72, J:74, K:75, L:76};
         }
 
     var storeThisPosition = function(segment){
