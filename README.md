@@ -5,4 +5,4 @@ Snayk is an implementation of the game `Snake' in pure JavaScript, but using pol
 
 It was written as real introduction to javascript, and I am indebted to Eloquent Javascript by Marijn Haverbeke and Mary Rose Cook's seminar on Game Development at the Recurse Centre.  
 
-You can play snayk [here](http://condnsdmatters.github.io)
+You can play snayk [here](http://condnsdmatters.github.io/snayk)
